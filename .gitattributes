@@ -1,0 +1,14 @@
+# Normalise line endings so diffs stay clean across Windows and the
+# Linux server Hostinger runs. Text files are stored with LF in git.
+* text=auto eol=lf
+
+# Binary assets must never be line-ending converted.
+*.pdf   binary
+*.jpg   binary
+*.jpeg  binary
+*.png   binary
+*.webp  binary
+*.gif   binary
+*.ico   binary
+*.woff  binary
+*.woff2 binary

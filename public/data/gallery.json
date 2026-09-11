@@ -1,0 +1,33 @@
+{
+  "albums": [
+    {
+      "id": "campus",
+      "title": "Campus",
+      "cover": "IMG-20211109-WA0002.jpg",
+      "photos": [
+        { "file": "IMG-20211109-WA0002.jpg", "caption": "The main school building" },
+        { "file": "IMG_20190210_145401.jpg", "caption": "Saraswati Puja on the school grounds" }
+      ]
+    },
+    {
+      "id": "culture",
+      "title": "Cultural Programmes",
+      "cover": "IMG_2714.jpg",
+      "photos": [
+        { "file": "IMG_2714.jpg", "caption": "Students in folk costume, Teachers' Day 2019" },
+        { "file": "IMG_2720.jpg", "caption": "Dr. Asim Kumar Mandal with the Shikshak Ratna Samman 2019" },
+        { "file": "IMG_2259.jpg", "caption": "Award ceremony at Netaji Indoor Stadium, 2019" },
+        { "file": "IMG-20151211-WA0014.jpg", "caption": "School cultural gathering" }
+      ]
+    },
+    {
+      "id": "academics",
+      "title": "Academics & Laboratories",
+      "cover": "WP_20160826_002.jpg",
+      "photos": [
+        { "file": "WP_20160826_002.jpg", "caption": "Students at work in the science laboratory" },
+        { "file": "IMG_20190209_102900.jpg", "caption": "Saraswati Puja decoration by students" }
+      ]
+    }
+  ]
+}
