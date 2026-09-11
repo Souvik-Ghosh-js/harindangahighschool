@@ -32,9 +32,13 @@ on the server.
 | Setting | Value |
 |---|---|
 | Application root | the project folder |
-| Startup file | `npm start` (runs `next start`) |
+| Startup command | `npm start` |
 | Node version | 20 or newer |
 | Build command | `npm install && npm run build` |
+
+`npm start` runs `node .next/standalone/server.js`. Do **not** change it to
+`next start` — that does not work with this app's standalone output. The server reads
+the `PORT` environment variable that Hostinger sets, so no port needs configuring.
 
 ### 3. Set an environment variable
 

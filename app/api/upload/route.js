@@ -27,7 +27,7 @@ const KINDS = {
     },
   },
   img: {
-    dir: path.join(process.cwd(), "public", "assets", "img"),
+    dir: IMG_DIR,
     max: 10 * 1024 * 1024,
     types: {
       "image/jpeg": [".jpg", ".jpeg"],
