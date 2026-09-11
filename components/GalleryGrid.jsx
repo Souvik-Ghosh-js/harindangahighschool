@@ -56,7 +56,9 @@ export default function GalleryGrid({ albums }) {
         <button className="lbox-x" aria-label="Close">
           &times;
         </button>
-        {lightbox ? <img src={lightbox.src} alt={lightbox.alt} /> : <img alt="" />}
+        {/* Rendered only when a photo is chosen — a src-less <img>
+            counts as a broken image to browsers and crawlers. */}
+        {lightbox ? <img src={lightbox.src} alt={lightbox.alt} /> : null}
       </div>
     </>
   );

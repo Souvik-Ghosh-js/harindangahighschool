@@ -70,6 +70,12 @@ npm start
 
 Hostinger normally runs these for you from the panel settings above.
 
+**A note on the build:** `next build` alone does not produce a runnable standalone
+folder — it leaves out the CSS/JS chunks and the `public/` folder, which yields a site
+with no styling, no JavaScript and no images. A `postbuild` step in `package.json` copies
+both automatically, so `npm run build` always produces a complete build. If you ever run
+`next build` directly, run `node scripts/prepare-standalone.mjs` afterwards.
+
 ---
 
 ## ⚠️ Important: file persistence
