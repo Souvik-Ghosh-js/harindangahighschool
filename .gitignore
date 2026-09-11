@@ -30,3 +30,10 @@ Thumbs.db
 
 # Temp files from the static build
 .port_*.txt
+
+# Content snapshots written by `npm run backup`.
+# These hold real site data — keep them off git and out of deploy zips.
+backups/
+
+# Deploy archives — build artifacts, never source.
+*.zip

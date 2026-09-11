@@ -189,28 +189,63 @@ and `public/data`. In File Manager, set those folders to permissions `755`.
 
 ## Updating the site later
 
-To deploy new code, upload and extract a fresh ZIP, then:
+### There are two ZIPs — use the right one
 
-```bash
-npm install
-npm run build
-```
+| ZIP | When | Contains |
+|---|---|---|
+| `harindanga-deploy.zip` | **First install only** | Everything, including the starting notices and photos |
+| `harindanga-update.zip` | **Every update after that** | Code only — no `public/data`, no `public/assets` |
 
-and restart the app.
+The update ZIP deliberately leaves out every folder the school edits. Extracting it
+over a running site **cannot** touch your notices, PDFs or photographs — there is
+nothing in it to overwrite them with.
 
-### ⚠️ Protect your content first
+**Never extract `harindanga-deploy.zip` over a live site.** It carries the original
+seed content and would roll everything back to launch day.
 
-Notices, photographs and staff lists are stored **as files on the server**:
+### The update routine
+
+1. Back up first (takes seconds, and means a mistake costs nothing):
+
+   ```bash
+   npm run backup
+   ```
+
+   That writes `backups/<date>/` containing your data and uploads. Download it.
+
+2. Upload and extract **`harindanga-update.zip`** into the app folder.
+
+3. Rebuild and restart:
+
+   ```bash
+   npm install
+   npm run build
+   ```
+
+   Then restart the app from your Node.js panel.
+
+4. Check the site: your notices, photos and staff list should be exactly as before,
+   with the new code in place.
+
+### What is safe and what is not
+
+| Action | Safe? |
+|---|---|
+| Extract `harindanga-update.zip` over a live site | ✅ Yes — no content inside it |
+| Extract `harindanga-deploy.zip` over a live site | ❌ No — resets content to launch day |
+| Delete the app folder and re-upload | ❌ No — destroys all uploads |
+| `npm install` / `npm run build` / restart | ✅ Yes — never touches content |
+
+### Backups
+
+Run `npm run backup` regularly — monthly is sensible, and always before an update.
+It snapshots the three folders that hold everything the school has added:
 
 - `public/data/` — notices, staff, gallery, pop-up
 - `public/assets/doc/` — notice PDFs
 - `public/assets/img/` — photographs
 
-**Before replacing files on a redeploy, download those three folders.** Extracting a
-new ZIP over the top will overwrite everything the school has added since launch.
+To restore, copy the `public/` folder from a backup back over the app's `public/` folder.
 
-Safest routine: download those folders → upload the new ZIP → copy the folders back →
-rebuild → restart.
-
-This is also your backup routine. Do it periodically regardless of deploys — those
-three folders are the entire content of the website.
+Hostinger's own daily backups are a second safety net, but keep your own copies too —
+they are small and downloading them takes a moment.

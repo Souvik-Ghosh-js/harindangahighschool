@@ -10,7 +10,8 @@
     "start": "node .next/standalone/server.js",
     "lint": "next lint",
     "set-password": "node scripts/set-password.mjs",
-    "postbuild": "node scripts/prepare-standalone.mjs"
+    "postbuild": "node scripts/prepare-standalone.mjs",
+    "backup": "node scripts/backup-content.mjs"
   },
   "dependencies": {
     "next": "16.3.4",
