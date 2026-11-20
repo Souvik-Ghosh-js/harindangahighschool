@@ -2,6 +2,7 @@ import { Bricolage_Grotesque, Instrument_Sans, Hind_Siliguri } from "next/font/g
 import { getSite } from "@/lib/content";
 import { siteUrl } from "@/lib/seo";
 import { mediaUrl } from "@/lib/media-url";
+import { imgUrl } from "@/lib/image-loader";
 import "./globals.css";
 
 const head = Bricolage_Grotesque({ subsets: ["latin"], variable: "--f-head", display: "swap" });
@@ -17,7 +18,7 @@ export async function generateMetadata() {
     applicationName: site.name,
     formatDetection: { telephone: true, email: true, address: true },
     // Small optimised copy of the emblem — the original PNG is 215 KB.
-    icons: site.logo ? { icon: `/_next/image?url=${encodeURIComponent(mediaUrl(site.logo))}&w=64&q=70`, apple: `/_next/image?url=${encodeURIComponent(mediaUrl(site.logo))}&w=256&q=70` } : undefined,
+    icons: site.logo ? { icon: imgUrl(mediaUrl(site.logo), 64, 70), apple: imgUrl(mediaUrl(site.logo), 256, 70) } : undefined,
     verification: seo.google_verification ? { google: seo.google_verification } : undefined,
   };
 }

@@ -59,3 +59,16 @@ npm run dev
 - Teacher photos, subjects and bios; professional campus/event photographs.
 - Map coordinates (Website pages → School details) and social links.
 - Change the Super Admin password (My account) before handover.
+
+## Deploying to Netlify (manual, via CLI)
+
+The live site is `haringhatahighschool.netlify.app` (project linked in `.netlify/`, not committed).
+
+```bash
+npm run deploy      # builds locally with your .env, then uploads to production
+```
+
+Why a *local* build: variables pasted into Netlify as protected secrets are masked for CLI builds, so the
+build reads the real values from your local `.env` (`--offline`). At runtime Netlify supplies the real
+secrets (`TURSO_DATABASE_URL`, `TURSO_AUTH_TOKEN`, `JWT_SECRET`, `SITE_URL`).
+The database driver is `@libsql/client/web` (pure JavaScript) so the build works on any OS.

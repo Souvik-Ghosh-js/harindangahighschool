@@ -2,7 +2,7 @@
   "name": "harindanga-high-school",
   "version": "2.0.0",
   "private": true,
-  "description": "Harindanga High School (H.S.) — public website and admin panel",
+  "description": "Harindanga High School (H.S.) \u2014 public website and admin panel",
   "type": "module",
   "scripts": {
     "dev": "next dev",
@@ -10,7 +10,8 @@
     "start": "next start",
     "db:migrate": "node --env-file=.env scripts/migrate.mjs",
     "db:seed": "node --env-file=.env scripts/seed.mjs",
-    "admin:create": "node --env-file=.env scripts/create-admin.mjs"
+    "admin:create": "node --env-file=.env scripts/create-admin.mjs",
+    "deploy": "NEXT_PUBLIC_IMAGE_CDN=netlify npx --yes netlify-cli@latest build --offline && npx --yes netlify-cli@latest deploy --prod --no-build --dir .netlify/static --skip-functions-cache"
   },
   "engines": {
     "node": ">=20.9.0"

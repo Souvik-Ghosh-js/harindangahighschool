@@ -20,12 +20,10 @@ const nextConfig = {
   reactStrictMode: true,
 
   images: {
-    // WebP encodes much faster than AVIF on the first request for each size.
-    formats: ["image/webp"],
-    localPatterns: [{ pathname: "/media/**" }],
-    qualities: [70, 82],
+    // Every photo is resized through lib/image-loader.js (Netlify Image CDN in production).
+    loader: "custom",
+    loaderFile: "./lib/image-loader.js",
     deviceSizes: [480, 640, 828, 1080, 1280, 1600, 1920, 2400],
-    minimumCacheTTL: 31536000,
   },
 
   async headers() {
