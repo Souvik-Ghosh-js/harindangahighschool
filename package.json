@@ -1,24 +1,31 @@
 {
   "name": "harindanga-high-school",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "private": true,
-  "description": "Website and admin panel for Harindanga High School (H.S), South 24 Parganas",
+  "description": "Harindanga High School (H.S.) — public website and admin panel",
   "type": "module",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "node .next/standalone/server.js",
-    "lint": "next lint",
-    "set-password": "node scripts/set-password.mjs",
-    "postbuild": "node scripts/prepare-standalone.mjs",
-    "backup": "node scripts/backup-content.mjs"
-  },
-  "dependencies": {
-    "next": "16.3.4",
-    "react": "19.3.0",
-    "react-dom": "19.3.0"
+    "start": "next start",
+    "db:migrate": "node --env-file=.env scripts/migrate.mjs",
+    "db:seed": "node --env-file=.env scripts/seed.mjs",
+    "admin:create": "node --env-file=.env scripts/create-admin.mjs"
   },
   "engines": {
     "node": ">=20.9.0"
+  },
+  "dependencies": {
+    "@libsql/client": "^0.18.0",
+    "bcryptjs": "^3.0.3",
+    "jose": "^6.2.18",
+    "next": "^16.4.6",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1",
+    "server-only": "^0.0.1",
+    "zod": "^4.6.7"
+  },
+  "devDependencies": {
+    "sharp": "^0.35.5"
   }
 }

@@ -1,39 +1,13 @@
-# Dependencies
 node_modules/
-.pnp
-.pnp.js
-
-# Next.js build output
 .next/
 out/
-build/
-
-# Admin credentials — NEVER commit these.
-# Created on the server by `npm run set-password`.
-data/admin.json
-
-# Environment
+.netlify/
 .env
-.env.local
-.env*.local
-
-# Logs
+.env.*
+!.env.example
 *.log
-npm-debug.log*
-
-# OS / editor
 .DS_Store
-Thumbs.db
-*.swp
 .vscode/
 .idea/
-
-# Temp files from the static build
-.port_*.txt
-
-# Content snapshots written by `npm run backup`.
-# These hold real site data — keep them off git and out of deploy zips.
-backups/
-
-# Deploy archives — build artifacts, never source.
-*.zip
+*.tsbuildinfo
+next-env.d.ts

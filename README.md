@@ -1,190 +1,61 @@
-# Harindanga High School — Website & Admin Panel
+# Harindanga High School (H.S.) — Website & Admin Panel
 
-A Next.js application: the public website plus a password-protected admin panel.
-Changes made in the panel go live on the website immediately — no uploading, no publish step.
+Next.js 16 · Turso (libSQL) · GSAP + Lenis · JWT admin auth. Built by GOBT.
 
----
+Everything on the public website — text, photos, menu, notices, events, teachers,
+gallery, downloads, policies, SEO — is edited from the admin panel at **/admin**.
+Nothing is hard-coded.
 
-## Quick start (local)
-
-```bash
-npm install
-npm run set-password        # create the admin login (first time only)
-npm run dev                 # http://localhost:3000
-```
-
-The admin panel is at **/admin**, reachable from the "Staff Login" link in the footer.
-
----
-
-## Deploying to Hostinger
-
-These steps assume a Hostinger plan with **Node.js application** support (VPS or Cloud).
-
-### 1. Put the code on the server
-
-Either push this folder to a Git repository and connect it in hPanel, or upload the
-project folder directly. **Do not upload `node_modules` or `.next`** — they are rebuilt
-on the server.
-
-### 2. Configure the Node app in hPanel
-
-| Setting | Value |
-|---|---|
-| Application root | the project folder |
-| Startup command | `npm start` |
-| Node version | 20 or newer |
-| Build command | `npm install && npm run build` |
-
-`npm start` runs `node .next/standalone/server.js`. Do **not** change it to
-`next start` — that does not work with this app's standalone output. The server reads
-the `PORT` environment variable that Hostinger sets, so no port needs configuring.
-
-### 3. Set an environment variable
-
-In hPanel's Node app settings, add:
-
-```
-SESSION_SECRET=<a long random string>
-NODE_ENV=production
-```
-
-`npm run set-password` prints a suitable random value for `SESSION_SECRET`. Setting it
-means admin sessions survive a password change and a server restart. If you skip it the
-app still works, but everyone is signed out whenever the password changes.
-
-### 4. Create the admin login on the server
-
-Open Hostinger's terminal for the app and run:
-
-```bash
-npm run set-password
-```
-
-It asks for a username and password and writes `data/admin.json`. That file is
-gitignored and never served to browsers — it exists only on the server.
-
-### 5. Build and start
+## Run locally
 
 ```bash
 npm install
-npm run build
-npm start
+cp .env.example .env        # fill in Turso URL/token, JWT_SECRET, SITE_URL
+npm run db:migrate          # create tables (safe to re-run)
+npm run admin:create        # create the Super Admin from SEED_ADMIN_EMAIL / SEED_ADMIN_PASSWORD
+npm run db:seed             # one-time import of the legacy website content (refuses if content exists)
+npm run dev
 ```
 
-Hostinger normally runs these for you from the panel settings above.
+## Deploy (Netlify)
 
-**A note on the build:** `next build` alone does not produce a runnable standalone
-folder — it leaves out the CSS/JS chunks and the `public/` folder, which yields a site
-with no styling, no JavaScript and no images. A `postbuild` step in `package.json` copies
-both automatically, so `npm run build` always produces a complete build. If you ever run
-`next build` directly, run `node scripts/prepare-standalone.mjs` afterwards.
+1. Connect the repository in Netlify. Build settings come from `netlify.toml`.
+2. Site settings → Environment variables: `TURSO_DATABASE_URL`, `TURSO_AUTH_TOKEN`,
+   `JWT_SECRET` (48+ random characters), `SITE_URL` (the final public address, e.g.
+   `https://www.harindangahighschool.org.in`).
+3. Deploy. Content lives in Turso, so redeploys never touch school data.
 
----
+## How it fits together
 
-## ⚠️ Important: file persistence
-
-Notices, staff, gallery data and uploaded PDFs/photos are stored **as files on the server**
-(`public/data/` and `public/assets/`). This is deliberate — it is simple, needs no database,
-and the school can back it up by copying a folder.
-
-It does mean:
-
-- **Never delete the app folder** on redeploy, or uploaded content is lost.
-- If you deploy by **replacing** the whole folder (rather than `git pull`), back up
-  `public/data/` and `public/assets/` first and restore them afterwards.
-- On a platform that resets the filesystem between deploys, this content would not survive.
-  Hostinger's Node hosting uses a persistent disk, so it does.
-
-**Recommended backup:** download `public/data/` and `public/assets/` periodically.
-That is the entire content of the site.
-
----
-
-## The admin panel
-
-Sign in at `/admin`.
-
-| Tab | What it does |
+| Path | Purpose |
 |---|---|
-| **Notices** | Add, edit, delete notices. Upload the PDF directly — it is stored automatically. |
-| **Teachers** | Add, edit, remove and reorder teaching staff. Serial numbers are automatic. |
-| **Event Gallery** | Create albums per event; upload photographs with captions. |
-| **Pop-up Notice** | Compose the site-wide announcement, with a live preview. |
+| `db/schema.sql` | All tables. Photos/PDFs are stored in Turso (`media` + `media_chunks`). |
+| `lib/blocks.js` | Every editable page section. Add a field here → it appears in the admin form and is validated on the server. |
+| `lib/entities.js` | Collections: notices, events, teachers, departments, albums, downloads. |
+| `lib/content.js` | Read-only queries for the public site (published content only). |
+| `lib/admin-crud.js` | Create/update/archive/reorder + cache refresh after every save. |
+| `proxy.js` + `lib/auth.js` | JWT (httpOnly cookie) checks for `/admin` and `/api/admin`. |
+| `components/site/Motion.jsx` | Lenis smooth scroll + all GSAP scroll animations. |
+| `app/(site)` | Public pages. `app/admin` + `app/api` — admin panel and API. |
 
-### How the pop-up behaves
+## Security
 
-It is shown **once per visitor**. Every time you save the pop-up it counts as a new
-announcement, so it appears again for everyone — including people who dismissed the
-previous one. Untick "Show this pop-up" to turn it off.
+- Passwords hashed with bcrypt (cost 12). Login is id + password; JWT (HS256, 10 h) in an
+  httpOnly, Secure, SameSite=Lax cookie.
+- Changing a password or turning an account off signs that user out everywhere (token version).
+- 6 failed logins in 15 minutes locks that email/IP for 15 minutes (stored in the database).
+- Writes require same-origin requests (CSRF), all input is validated server-side, all content
+  is rendered as text (no HTML), uploads are type-checked from their bytes and limited to 5 MB.
+- Editors cannot change the menu, Google settings, policies or users — Super Admin only.
+- "Remove" archives (restorable). Only a Super Admin can permanently delete an archived item.
+- Every change is recorded in the Activity log.
 
-### Changing the password
+## Before launch — content the school must confirm
 
-On the server:
-
-```bash
-npm run set-password
-```
-
-Passwords are hashed with scrypt and never sent to the browser. The login is verified on
-the server, sessions are signed httpOnly cookies, and repeated failed attempts from one
-address are rate-limited.
-
----
-
-## Project structure
-
-```
-app/
-  layout.js               Shared shell: header, footer, pop-up
-  page.js                 Home
-  about|academics|admission|administration|awards|
-  contact|facilities|faculty|gallery|hm-desk|notices/
-                          Public pages
-  admin/                  Admin panel route
-  api/
-    auth/login|logout|session/   Sign in, sign out, session check
-    data/[file]/          Read (public) and write (authenticated) content
-    upload/               Authenticated file upload
-
-components/               Header, Footer, Popup, gallery, notices, admin UI
-lib/
-  data.js                 Reads/writes public/data/*.json (atomic writes)
-  auth.js                 scrypt hashing, signed sessions, rate limiting
-  site.js                 Contact details, navigation, categories
-
-public/
-  data/                   notices | staff | gallery | popup  (the site's content)
-  assets/doc/             Notice PDFs (uploaded via the panel)
-  assets/img/             Photographs (uploaded via the panel)
-
-data/admin.json           Admin credentials — created on the server, never committed
-scripts/set-password.mjs  Creates or changes the admin login
-```
-
----
-
-## Editing site-wide details
-
-Phone number, email, address and the navigation menu live in **`lib/site.js`**.
-Change them once and every page updates.
-
----
-
-## Design system
-
-Brand tokens are CSS custom properties at the top of `app/globals.css` — deep indigo
-(`--ink` / `--indigo`) with a marigold accent (`--marigold`), Fraunces over Plus Jakarta
-Sans. Rebrand from there.
-
-Responsive at 1080px / 880px / 620px, and honours `prefers-reduced-motion`.
-
----
-
-## Notes
-
-- Pages that were "Under Construction" on the original site (Academics, Facilities) were
-  built out from the school's real documents. Alumni and Published were dropped rather than
-  shipped empty — add them when there is content.
-- The contact form opens the visitor's email client and stores nothing on the server.
-- Content and photographs came from the original harindangahighschool.org.in.
+- Mr. Nirmalya Haldar's portrait, approved quote and message (left empty on purpose — never
+  invent words for a real person), and the exact expansion of "DHT".
+- Dr. Asim Kumar Mandal's teacher profile is saved as a **draft** (hidden) pending confirmation;
+  the committee list still shows him as Secretary.
+- Teacher photos, subjects and bios; professional campus/event photographs.
+- Map coordinates (Website pages → School details) and social links.
+- Change the Super Admin password (My account) before handover.
