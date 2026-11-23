@@ -154,7 +154,7 @@ for (const [i, t] of staff.teaching.entries()) {
   if (/nirmalya/i.test(name)) { name = "Nirmalya Haldar"; designation = "DHT Teacher-in-Charge"; }
   if (/asim kumar mandal/i.test(name)) status = "draft"; // hidden pending school confirmation
   const r = await client.execute({
-    sql: `INSERT INTO teachers (slug, kind, name, designation, qualification, subjects, sort, status)
+    sql: `INSERT INTO teachers (slug, kind, name, designation, qualification, subject, sort, status)
           VALUES (?, 'teaching', ?, ?, ?, ?, ?, ?)`,
     args: [uniqueSlug("teachers", name), name, designation || "", t.qualification || "", "", i, status],
   });

@@ -55,7 +55,7 @@ export default async function TeacherPage({ params }) {
               )}
               {t.subjects && (
                 <li>
-                  <span>Subjects</span>
+                  <span>Subject</span>
                   <b>{t.subjects}</b>
                 </li>
               )}
