@@ -114,7 +114,7 @@ CREATE TABLE IF NOT EXISTS teachers (
   name          TEXT NOT NULL,
   designation   TEXT NOT NULL DEFAULT '',
   qualification TEXT NOT NULL DEFAULT '',
-  subjects      TEXT NOT NULL DEFAULT '',
+  subject       TEXT NOT NULL DEFAULT '',
   bio           TEXT NOT NULL DEFAULT '',
   experience    TEXT NOT NULL DEFAULT '',
   photo_id      TEXT REFERENCES media(id),

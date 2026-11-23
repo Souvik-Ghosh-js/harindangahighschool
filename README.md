@@ -62,7 +62,7 @@ npm run dev
 
 ## Deploying to Netlify (manual, via CLI)
 
-The live site is `haringhatahighschool.netlify.app` (project linked in `.netlify/`, not committed).
+The live site is `harindangahighschool.netlify.app` (project linked in `.netlify/`, not committed).
 
 ```bash
 npm run deploy      # builds locally with your .env, then uploads to production
