@@ -32,7 +32,7 @@ export default async function LeadershipPage() {
       <section className="section">
         <div className="wrap">
           <div className="lead-sec" style={{ alignItems: "start" }}>
-            <figure className="lead-portrait" style={{ margin: 0, position: "sticky", top: 100 }}>
+            <figure className="lead-portrait lead-portrait--sticky" style={{ margin: 0 }}>
               <div className="media" data-clip>
                 {b.portrait ? <Img id={b.portrait} media={media} priority sizes="(min-width:960px) 34vw, 100vw" alt={b.name} /> : <div className="photo-placeholder">{initials(b.name)}</div>}
               </div>

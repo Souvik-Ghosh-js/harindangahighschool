@@ -53,10 +53,10 @@ export default async function TeacherPage({ params }) {
                   <b>{t.qualification}</b>
                 </li>
               )}
-              {t.subjects && (
+              {t.subject && (
                 <li>
                   <span>Subject</span>
-                  <b>{t.subjects}</b>
+                  <b>{t.subject}</b>
                 </li>
               )}
               {t.experience && (

@@ -3176,3 +3176,12 @@ button:hover .zoom img {
 .contact-item p {
   font-size: clamp(1.1rem, 1.6vw, 1.3rem);
 }
+
+/* Leadership portrait stays in view only beside the text (desktop);
+   on phones it scrolls away with the page so the message is never covered. */
+@media (min-width: 900px) {
+  .lead-portrait--sticky {
+    position: sticky;
+    top: 110px;
+  }
+}

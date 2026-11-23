@@ -102,10 +102,10 @@ export default function TeacherTree({ groups, media }) {
                     <b>{sel.t.qualification}</b>
                   </li>
                 )}
-                {sel.t.subjects && (
+                {sel.t.subject && (
                   <li>
                     <span>Subject</span>
-                    <b>{sel.t.subjects}</b>
+                    <b>{sel.t.subject}</b>
                   </li>
                 )}
                 {sel.t.experience && (
